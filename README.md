@@ -39,21 +39,20 @@ The `isAnagram` function checks if two strings share the same characters with th
 
 ---
 
-## 💻 Usage
+## 💻 Usage & Available Scripts
 
-### In Code
-You can import the utility directly into your TypeScript project:
+In the project directory, you can run the following commands:
 
-```typescript
-import { isAnagram } from './src/anagram';
+### `npm test`
+Runs the complete test suite once using **Jest**.
+This is the command used by the CI/GitHub Actions pipeline.
+* *Alias: `npm run test`*
 
-// Basic Usage
-console.log(isAnagram('listen', 'silent')); // true
+### `npm run test:watch`
+Runs the tests in "Watch Mode".
+* The runner stays active and automatically re-runs tests whenever you save a file.
+* Great for development!
 
-// With Options
-const options = { 
-    ignoreCase: true, 
-    ignoreWhitespace: true 
-};
-
-console.log(isAnagram('Clint Eastwood', 'old west action', options)); // true
+### `npm run build`
+Compiles the TypeScript code into JavaScript.
+* Useful if you want to verify that your types are correct without running the logic tests.
