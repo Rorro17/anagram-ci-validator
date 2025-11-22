@@ -13,6 +13,7 @@ The `isAnagram` function checks if two strings share the same characters with th
 ### CI/CD Infrastructure
 * **Automated Testing:** Runs the full test suite on every `push` and `pull_request` to `main`.
 * **Manual Validation:** A custom GitHub Action workflow that allows you to input two words manually via the GitHub UI and see the result instantly in the build logs.
+
 ![GitHub Action](image.png)
 
 ---
