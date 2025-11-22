@@ -1,7 +1,7 @@
 {
   "name": "anagram-ci-validator",
   "version": "1.0.0",
-  "description": "",
+  "description": "A TypeScript library to validate if two strings are anagrams, with options for case, whitespace, and Unicode handling.",
   "main": "index.js",
   "scripts": {
     "test": "jest",
@@ -13,7 +13,7 @@
     "url": "git+https://github.com/Rorro17/anagram-ci-validator.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Rodrigo Manrique",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Rorro17/anagram-ci-validator/issues"

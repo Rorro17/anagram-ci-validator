@@ -1,58 +1,72 @@
-# Anagram CI Validator
+# Anagram Validator
 
-A robust, lightweight TypeScript utility that determines if two strings are anagrams. This project demonstrates a complete modern DevOps workflow using **TypeScript**, **Jest**, and **GitHub Actions** for automated testing and manual validation.
+The goal was to implement a function that checks if two strings are anagrams (same characters, same frequency) with support for configurable options like case sensitivity and whitespace handling.
 
-## 🚀 Features
+I also set up a CI pipeline using GitHub Actions to validate the solution automatically.
 
-### Core Functionality
-The `isAnagram` function checks if two strings share the same characters with the same frequencies ($O(n)$ complexity). It supports advanced configuration options:
-* **Case Sensitivity:** By default strict, but can ignore case.
-* **Whitespace Handling:** Can optionally ignore spaces/tabs.
-* **Unicode Normalization:** Correctly handles accents and combined characters (e.g., `ñ` vs `n` + `~`).
+## 📋 The Solution
 
-### CI/CD Infrastructure
-* **Automated Testing:** Runs the full test suite on every `push` and `pull_request` to `main`.
-* **Manual Validation:** A custom GitHub Action workflow that allows you to input two words manually via the GitHub UI and see the result instantly in the build logs.
+The core logic lives in `src/anagram.ts`.
+Instead of sorting the strings (which costs $O(n \log n)$), I used a **Frequency Map** approach to keep the time complexity down to **$O(n)$**.
+
+### Supported Options
+The function signature is `isAnagram(a, b, options)`. You can pass an object to handle edge cases:
+
+* **`ignoreCase`**: (Default: `false`) Treats 'A' and 'a' as the same.
+* **`ignoreWhitespace`**: (Default: `false`) Ignores spaces, tabs, and newlines.
+* **`normalizeUnicode`**: (Default: `false`) Handles accents correctly (e.g., matching a composed `ñ` with a decomposed `n` + `~`).
+
+---
+
+## 🛠️ Setup & Running Locally
+
+I used **TypeScript** and **Jest** for this project. You'll need Node.js (v18+) installed.
+
+1.  **Install dependencies:**
+    ```bash
+    npm ci
+    ```
+
+2.  **Run the test suite:**
+    ```bash
+    npm test
+    ```
+
+3.  **Run in watch mode (for development):**
+    ```bash
+    npm run test:watch
+    ```
+
+---
+
+## 🤖 CI/CD & Automation
+
+I configured **GitHub Actions** to handle both automated testing and manual verification. You can find the workflow file in `.github/workflows/ci.yml`.
+
+### 1. Automated CI (Push & PR)
+To ensure code quality, the test suite runs automatically whenever:
+* Code is pushed to `main` or `master`.
+* A Pull Request is opened targeting `main` or `master`.
+
+This guarantees that no regressions are introduced during refactoring.
+
+### 2. Manual Testing (Workflow Dispatch)
+I added a manual trigger so you can test specific words directly in the GitHub UI without needing to clone the repo.
+
+**How to run it:**
+1.  Go to the **Actions** tab.
+2.  Select **Anagram Validator** on the left.
+3.  Click **Run workflow**.
+4.  Enter two words (e.g., "Listen" and "Silent") and hit Run.
+
+The script uses `ts-node` to execute the function with your inputs and prints the result ("✅ Anagrams" or "❌ Not Anagrams") directly in the build logs.
 
 ![GitHub Action](image.png)
 
 ---
 
-## 🛠️ Getting Started
+## 📂 Project Structure
 
-### Prerequisites
-* Node.js (v18 or higher)
-* npm
-
-### Installation
-
-1.  Clone the repository:
-    ```bash
-    git clone [https://github.com/YOUR_USERNAME/anagram-ci-validator.git](https://github.com/YOUR_USERNAME/anagram-ci-validator.git)
-    cd anagram-ci-validator
-    ```
-
-2.  Install dependencies:
-    ```bash
-    npm ci
-    ```
-
----
-
-## 💻 Usage & Available Scripts
-
-In the project directory, you can run the following commands:
-
-### `npm test`
-Runs the complete test suite once using **Jest**.
-This is the command used by the CI/GitHub Actions pipeline.
-* *Alias: `npm run test`*
-
-### `npm run test:watch`
-Runs the tests in "Watch Mode".
-* The runner stays active and automatically re-runs tests whenever you save a file.
-* Great for development!
-
-### `npm run build`
-Compiles the TypeScript code into JavaScript.
-* Useful if you want to verify that your types are correct without running the logic tests.
+* `src/anagram.ts` - The implementation.
+* `tests/anagram.test.ts` - Jest test suite covering happy paths, edge cases, and options.
+* `.github/workflows/ci.yml` - The CI configuration.
