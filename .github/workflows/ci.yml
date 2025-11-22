@@ -1,0 +1,51 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+    inputs:
+      word_a:
+        description: 'First Word'
+        required: true
+        default: 'listen'
+      word_b:
+        description: 'Second Word'
+        required: true
+        default: 'silent'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Automated Suite
+        if: github.event_name != 'workflow_dispatch'
+        run: npm test
+
+      - name: Compare User Inputs
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          INPUT_A: ${{ inputs.word_a }}
+          INPUT_B: ${{ inputs.word_b }}
+        run: |
+          npx -y ts-node -e '
+            import { isAnagram } from "./src/anagram";
+            const a = process.env.INPUT_A || "";
+            const b = process.env.INPUT_B || "";
+            const result = isAnagram(a, b);
+            console.log(result ? "✅ Anagrams" : "❌ Not Anagrams");
+          '
