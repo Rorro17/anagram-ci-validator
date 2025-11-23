@@ -8,24 +8,27 @@ export interface AnagramOptions {
  * Return true if `a` and `b` are anagrams (same characters with the same multiplicities).
  * Order does not matter.
  */
-function preprocess(str: string, options: AnagramOptions): string {
-    if (options.normalizeUnicode) str = str.normalize("NFC");
-    if (options.ignoreCase) str = str.toLowerCase();
-    if (options.ignoreWhitespace) str = str.replace(/\s+/g, '');
-    return str;
+function preprocess(input: string, options: AnagramOptions): string {
+    let processed = input;
+    if (options.normalizeUnicode) processed = processed.normalize("NFC");
+    if (options.ignoreCase) processed = processed.toLowerCase();
+    if (options.ignoreWhitespace) processed = processed.replace(/\s+/g, '');
+    return processed;
 }
 
-export function isAnagram(a: string, b: string, options: AnagramOptions = {}): boolean {
-    const strA = preprocess(a, options);
-    const strB = preprocess(b, options);
-    if (strA.length !== strB.length) return false;
+export function isAnagram(first: string, second: string, options: AnagramOptions = {}): boolean {
+    const normalizedFirst = preprocess(first, options);
+    const normalizedSecond = preprocess(second, options);
+    if (normalizedFirst.length !== normalizedSecond.length) return false;
 
-    const charMap = new Map<string, number>();
-    for (const char of strA) charMap.set(char, (charMap.get(char) || 0) + 1);
-    for (const char of strB) {
-        const count = charMap.get(char);
+    const characterCounts = new Map<string, number>();
+    for (const character of normalizedFirst) {
+        characterCounts.set(character, (characterCounts.get(character) || 0) + 1);
+    }
+    for (const character of normalizedSecond) {
+        const count = characterCounts.get(character);
         if (!count) return false;
-        charMap.set(char, count - 1);
+        characterCounts.set(character, count - 1);
     }
     return true;
 }
